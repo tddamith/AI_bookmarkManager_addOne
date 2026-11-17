@@ -28,6 +28,48 @@ function toast(msg, onUndo) {
   clearTimeout(toastTimer); toastTimer = setTimeout(() => { $("toast").hidden = true; }, 8000);
 }
 
+// ── Summary (opt-in, local) ────────────────────────────────
+// Reading page content is opt-in: Stash asks for this site's permission, reads the text once on this device,
+// and picks the most informative sentences. Nothing is sent anywhere.
+const STOP = new Set("the a an and or but if of to in on at for with from by as is are was were be been it its this that these those you your we our they their he she i not no so than then too very can will just about into over also more most such".split(" "));
+const sums = new Map();   // url -> { words, sents, longer }
+let sumLonger = false, sumBusy = false, sumMsg = "";
+function extract(text, words) {
+  const sents = (text.replace(/\s+/g, " ").match(/[^.!?]+[.!?]+/g) ?? []).map((s) => s.trim()).filter((s) => s.length > 40 && s.length < 260 && !/^(share|copyright|sign up|subscribe|cookie)/i.test(s));
+  const freq = new Map(); sents.forEach((s) => s.toLowerCase().split(/[^a-z0-9]+/).forEach((w) => w.length > 2 && !STOP.has(w) && freq.set(w, (freq.get(w) ?? 0) + 1)));
+  const scored = sents.map((s, i) => { const ws = s.toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 2 && !STOP.has(w)); return { s, i, sc: ws.reduce((t, w) => t + (freq.get(w) ?? 0), 0) / Math.sqrt(ws.length || 1) }; });
+  const ranked = scored.sort((a, b) => b.sc - a.sc);
+  return { words, bullets: (n) => ranked.slice(0, n).sort((a, b) => a.i - b.i).map((x) => x.s) };
+}
+async function runSummary() {
+  if (!tab) return; sumBusy = true; sumMsg = ""; paintSummary(new URL(tab.url).hostname);
+  try {
+    const origins = [new URL(tab.url).origin + "/*"];
+    if (!(await api.permissions.contains({ origins })) && !(await api.permissions.request({ origins }))) { sumMsg = "Stash needs your OK to read this page. Nothing was read."; return; }
+    const [{ result }] = await api.scripting.executeScript({ target: { tabId: tab.id }, func: () => { const el = document.querySelector("article, main, [role=main]") || document.body; return { text: (el.innerText || "").slice(0, 60000), words: (document.body.innerText || "").split(/\s+/).filter(Boolean).length }; } });
+    const s = extract(result.text, result.words);
+    if (!s.bullets(1).length) { sumMsg = "There isn't enough text on this page to summarize."; return; }
+    sums.set(tab.url, s);
+  } catch { sumMsg = "Couldn't read this page. Try reloading it."; }
+  finally { sumBusy = false; paintPage(); }
+}
+function paintSummary(host) {
+  const body = $("sumBody"); body.replaceChildren(); $("sumBtns").hidden = true; $("readTime").textContent = "";
+  $("sum").hidden = !host; if (!host) return;
+  const s = sums.get(tab.url);
+  if (s) {
+    $("readTime").textContent = `${Math.max(1, Math.round(s.words / 220))} min read`; $("sumBtns").hidden = false;
+    $("longer").textContent = sumLonger ? "Shorter" : "Longer"; $("longer").setAttribute("aria-pressed", sumLonger);
+    body.append(el("ul", { className: "sumlist" }, ...s.bullets(sumLonger ? 5 : 3).map((t) => el("li", { textContent: t }))));
+    return;
+  }
+  const btn = el("button", { type: "button", className: "btn sm outline", textContent: sumBusy ? "Reading…" : "Summarize this page" });
+  if (sumBusy) btn.setAttribute("aria-busy", "true"); btn.onclick = runSummary;
+  body.append(el("div", { className: "sumask" }, el("span", { textContent: sumMsg || "Reads this page once, on this device. Nothing is sent anywhere." }), btn));
+}
+$("longer").onclick = () => { sumLonger = !sumLonger; paintSummary(new URL(tab.url).hostname); };
+$("copy").onclick = async (e) => { const s = sums.get(tab.url); if (!s) return; await navigator.clipboard.writeText(s.bullets(sumLonger ? 5 : 3).map((t) => "• " + t).join("\n")); const b = e.currentTarget; b.textContent = "Copied"; setTimeout(() => (b.textContent = "Copy"), 1500); };
+
 // ── On this page ───────────────────────────────────────────
 let tab = null, marks = [], roots = [];
 async function folderNamed(re, create) {
@@ -50,11 +92,16 @@ async function paintPage() {
     const dup = host && marks.find((b) => normUrl(b.url) === normUrl(tab.url));
   const sug = host ? suggestFolder(host) : null;
   $("pageFolder").textContent = host ? `Folder — ${dup?.folder?.title ?? sug?.title ?? "Stash"}` : "";
-  $("save").textContent = dup ? "Saved" : "Save page"; $("save").disabled = !host || !!dup;
+  $("save").textContent = dup ? "Saved" : (host && sums.has(tab.url) ? "Save with summary" : "Save page"); $("save").disabled = !host || !!dup;
   $("later").disabled = !host || !!dup;
+  paintSummary(host);
 }
 // "Save page" opens the Save page screen (folder, tags, note, reminder).
-$("save").onclick = () => { location.href = "save.html"; };
+$("save").onclick = async () => {
+  const s = tab && sums.get(tab.url);
+  if (s) await api.storage.session.set({ pendingSummary: { url: tab.url, text: s.bullets(3).join("\n") } });   // prefilled as the note
+  location.href = "save.html";
+};
 $("later").onclick = (e) => withBusy(e.currentTarget, async () => {
   const f = await folderNamed(/read\s*later/i, "Read later");
   const b = await api.bookmarks.create({ parentId: f.id, title: tab.title, url: tab.url });
@@ -64,7 +111,7 @@ $("later").onclick = (e) => withBusy(e.currentTarget, async () => {
 api.tabs.onActivated.addListener(paintPage);
 api.tabs.onUpdated.addListener((_i, info) => { if (info.url || info.status === "complete") paintPage(); });
 
-// ── Stats, suggestions, chart ──────────────────────────────
+// ── Stats and suggestions ──────────────────────────────
 async function load() {
   const session = await getSession();
   if (!session) { location.href = "login.html"; return; }
@@ -94,17 +141,6 @@ async function load() {
     ul.append(el("li", {}, el("div", { className: "txt" }, el("span", { textContent: t.title }), el("small", { textContent: t.note })), btn));
   });
 
-  // Chart: share of saves by folder (visit tracking arrives with Insights).
-  const byFolder = new Map();
-  marks.forEach((b) => { const n = b.folder?.title || "Other"; byFolder.set(n, (byFolder.get(n) ?? 0) + 1); });
-  const top = [...byFolder.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
-  const bars = $("bars"); bars.replaceChildren();
-  if (!top.length) bars.append(el("div", { className: "none-note", textContent: "Save a few pages to see your folders here." }));
-  top.forEach(([n, c], i) => {
-    const pct = Math.round((c / marks.length) * 100);
-    bars.append(el("div", { className: "bar" + (i ? "" : " first") }, el("span", { textContent: n }), el("div", { className: "track" }, el("div", { className: "fill", style: `width:${Math.round((c / top[0][1]) * 100)}%` })), el("span", { className: "pct", textContent: pct + "%" })));
-  });
-  bars.setAttribute("aria-label", "Biggest folders: " + top.map(([n, c]) => `${n} ${Math.round((c / marks.length) * 100)}%`).join(", "));
   const { pins = [] } = await api.storage.local.get("pins");
   const pinned = pins.map((id) => marks.find((b) => b.id === id)).filter(Boolean);
   $("pinSec").hidden = !pinned.length;

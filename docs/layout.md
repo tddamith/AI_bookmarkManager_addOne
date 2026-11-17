@@ -47,10 +47,13 @@ Height ≈ 54px (padding 14px 18px), `border-bottom: 1px solid #111`.
 ### Sign up (lime)
 1. Header · 2. **Ready to tidy your bookmarks?** (max-width 340px) · 3. Three check bullets: AI files every save for you · One-tap tidy-up · Free forever, no card needed · 4. **Sign up with Google** · 5. `or` · 6. Name, Email, Password · 7. ☐ Terms and Privacy Policy · 8. **Create account** → Plans · 9. Footer: "Have an account? Log in".
 
-### Home (off-white)
-Header (Popup · avatar · close) → search pill "Ask your bookmarks…" with round search button → **4-tab segmented bar at the top**: Home · Library · Tidy · For you (36px tabs in a 1.5px pill, active = black) → body (padding 16px 18px 18px, gap 16px): lime **On this page** card (title, folder, tags, *Save page* + *Read later*) → stats strip (saved / this week / read later) → **AI suggestions** list (Merge, Move; See all) → sky **Most visited this week** bar chart (Insights link).
-
-> Status: implemented (`home.html`). "On this page" saves into the folder you already use for that site (else a *Stash* folder); *Read later* uses a *Read later* folder. The chart shows share of saves per folder until visit tracking (Insights) exists.
+### Home (off-white) — `home.html`
+Updated to the revised *Side panel · Home* board. Header (avatar + close) → search pill → top tabs (Home active) → body (padding 16px 18px, gap 16px):
+1. Lime **On this page** card: label + "N min read" (right), page title with the site icon (20px), a ruled **Summary** block (sparkle title; **Copy** and **Longer / Shorter** 28px outline buttons; three bullets, five when longer), "Folder — … · site" row, then **Save page** (becomes **Save with summary** once a summary exists; opens the Save page screen, with the summary prefilled as the note) and **Read later** (saves in one tap, with Undo).
+2. **AI suggestions —** list (up to 2: Merge duplicates, Sort unsorted, Read later piling up) with *See all* → Tidy.
+3. Stats strip (*saved · this week · read later*) with an **Insights** outline pill button at its right end (replaces the old "biggest folders" chart card).
+4. *Pinned —* list (only when pages are pinned from Insights), and the Getting started card / coach bubble on top for new accounts (see Onboarding 5).
+**Summary is opt-in and local.** Reading page content is opt-in (spec): the card first shows "Summarize this page — reads this page once, on this device. Nothing is sent anywhere." Pressing it asks the browser for that site's permission (once per site), reads the page text, and picks the most informative sentences (word-frequency scoring). "N min read" comes from the word count. No AI service is used; wording says *Summary*, not *AI summary*.
 
 ### Plans, Checkout, You're Pro (gray / white / sky)
 Checked against the boards *Side panel · Plans / Pay with PayPal / You're Pro*. Same shell as Log in and Sign up (header → `.panel-body` padding 24px 28px, gap 16px).

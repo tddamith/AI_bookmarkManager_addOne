@@ -25,8 +25,15 @@
     </section>
 
     <section class="page" id="pageCard" aria-labelledby="pageLbl">
-      <div id="pageLbl" class="lbl">On this page —</div>
+      <div class="pagehead"><div id="pageLbl" class="lbl">On this page —</div><span id="readTime" class="lbl"></span></div>
       <div class="pagetitle"><span id="pageIcon"></span><h1 id="pageTitle">Open a web page</h1></div>
+      <div class="sum" id="sum">
+        <div class="sumhead">
+          <div class="sumtitle"><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 7.4L22 11l-7.4 2.6L12 21l-2.6-7.4L2 11l7.4-2.6z" fill="#111"/></svg>Summary</div>
+          <div class="sumbtns" id="sumBtns" hidden><button id="copy" type="button" class="btn tiny outline">Copy</button><button id="longer" type="button" class="btn tiny outline" aria-pressed="false">Longer</button></div>
+        </div>
+        <div id="sumBody" aria-live="polite"></div>
+      </div>
       <div class="meta"><span id="pageFolder"></span><span id="pageHost"></span></div>
       <div class="actions">
         <button id="save" type="button" class="btn solid grow">Save page</button>
@@ -35,12 +42,6 @@
     </section>
     <div id="coach" class="coach" hidden><span class="caret" aria-hidden="true"></span><div class="bubble"><strong>Try it: tap Save page</strong><span>Stash already suggested a folder.</span></div></div>
     <p id="emptyNote" class="foot" hidden>Your library is empty for now — every save shows up in Library.</p>
-
-    <dl class="stats" aria-label="Your library">
-      <div><dd id="sSaved">–</dd><dt>saved</dt></div>
-      <div><dd id="sWeek">–</dd><dt>this week</dt></div>
-      <div><dd id="sLater">–</dd><dt>read later</dt></div>
-    </dl>
 
     <section id="pinSec" aria-labelledby="pinTitle" hidden>
       <div class="sechead"><h2 id="pinTitle">Pinned —</h2></div>
@@ -52,10 +53,14 @@
       <ul id="tips"></ul>
     </section>
 
-    <section class="chart" aria-labelledby="chTitle">
-      <div class="sechead"><h2 id="chTitle">Biggest folders —</h2><a href="insights.html">Insights</a></div>
-      <div id="bars" role="img"></div>
-    </section>
+    <div class="statsrow">
+      <dl class="stats" aria-label="Your library">
+        <div><dd id="sSaved">–</dd><dt>saved</dt></div>
+        <div><dd id="sWeek">–</dd><dt>this week</dt></div>
+        <div><dd id="sLater">–</dd><dt>read later</dt></div>
+      </dl>
+      <a class="btn outline insights" href="insights.html">Insights<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 20V12M12 20V5M19 20v-9"/></svg></a>
+    </div>
 
     <div id="toast" class="toast" role="status" aria-live="polite" hidden><span id="toastText"></span><button id="undo" type="button" class="btn sm outline" hidden>Undo</button></div>
   </main>

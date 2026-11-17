@@ -60,6 +60,7 @@ function paintTags(all) {
   if (!host) { $("title").textContent = "Open a web page to save it"; $("save").disabled = true; $("folder").disabled = true; return; }
   $("icon").replaceChildren(favicon(tab.url));
   $("title").textContent = tab.title || host;
+  { const { pendingSummary } = await api.storage.session.get("pendingSummary"); if (pendingSummary?.url === tab.url) { $("note").value = pendingSummary.text; await api.storage.session.remove("pendingSummary"); } }
   if (marks.some((b) => normUrl(b.url) === normUrl(tab.url))) { $("status").textContent = "You've already saved this page."; $("save").disabled = true; }
   const sug = suggestFolder(host);
   if (sug) { $("folder").value = sug; $("pick").hidden = false; $("pickText").textContent = "From your saves"; }

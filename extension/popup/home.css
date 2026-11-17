@@ -47,3 +47,19 @@ ul { list-style: none; margin: 0; padding: 0; }
 .coach strong { font-size: 14px; font-weight: 500; } .coach span:not(.caret) { font-size: 13px; color: #D0D0D0; }
 .foot { margin: 0; font-size: 12px; color: var(--ink-2); }
 .pagetitle { display: flex; align-items: flex-start; gap: 10px; } .pagetitle #pageIcon:empty { display: none; } .pagetitle .fav { margin-top: 1px; }
+
+/* Home v2 (updated board): summary card, stats row with Insights */
+.pagehead { display: flex; justify-content: space-between; align-items: center; } .pagehead .lbl:empty { display: none; }
+.sum { border-top: 1px solid var(--ink); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.sumhead { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.sumtitle { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; }
+.sumbtns { display: flex; gap: 4px; } .sumbtns[hidden] { display: none; }
+.btn.tiny { height: 28px; padding: 0 10px; border-radius: 14px; font-size: 12px; font-weight: 400; }
+.btn.tiny[aria-pressed=true] { background: var(--ink); color: var(--white); }
+.sumlist { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.sumlist li { display: flex; gap: 8px; font-size: 13px; line-height: 1.4; } .sumlist li::before { content: ""; width: 5px; height: 5px; border-radius: 3px; background: var(--ink); margin-top: 7px; flex-shrink: 0; }
+.sumask { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; font-size: 13px; line-height: 1.4; color: #2A2A2A; }
+.statsrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.statsrow .stats { border: 0; } .insights { height: 36px; padding: 0 12px; border-radius: 18px; font-size: 12px; gap: 4px; margin-left: 8px; }
+.meta a { color: var(--ink); }
+.sum[hidden] { display: none; }
