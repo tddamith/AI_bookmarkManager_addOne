@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><title>Stash — Importing</title>
+  <link rel="stylesheet" href="../styles/tokens.css"><link rel="stylesheet" href="../styles/forms.css"><link rel="stylesheet" href="../styles/buttons.css">
+  <link rel="stylesheet" href="panel.css"><link rel="stylesheet" href="onboarding.css">
+</head>
+<body class="panel">
+  <header id="head"></header>
+  <main class="panel-body onboard">
+    <div class="steps" role="img" aria-label="Step 2 of 4"><i class="done"></i><i class="on"></i><i></i><i></i></div>
+    <div class="lbl">Working on it —<br>Keep browsing, we’ll keep going</div>
+    <h1 id="h1">Sorting your bookmarks…</h1>
+
+    <div class="prog">
+      <div class="progrow"><span id="count">Reading…</span><span id="pct">0%</span></div>
+      <div class="bar" id="bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Import progress"><div id="fill"></div></div>
+    </div>
+
+    <ul class="checks" id="checks">
+      <li data-k="read"><i></i>Imported all bookmarks</li>
+      <li data-k="dups"><i></i>Removed duplicates</li>
+      <li data-k="folders"><i></i>Putting them into folders</li>
+      <li data-k="tags"><i></i>Adding tags</li>
+    </ul>
+
+    <p id="status" class="status info" role="status" aria-live="polite"></p>
+    <div class="bottom">
+      <p class="note">Your original browser bookmarks are never changed. Stash makes organized copies in a “Stash” folder.</p>
+      <a id="next" class="btn lg solid" href="ready.html" hidden>Continue</a>
+      <button id="retry" type="button" class="btn lg outline" hidden>Try again</button>
+    </div>
+  </main>
+  <script type="module" src="import.js"></script>
+</body>
+</html>

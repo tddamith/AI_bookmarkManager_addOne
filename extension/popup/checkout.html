@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Stash — Checkout</title>
+<link rel="stylesheet" href="../styles/tokens.css"><link rel="stylesheet" href="../styles/forms.css"><link rel="stylesheet" href="../styles/buttons.css"><link rel="stylesheet" href="panel.css"><link rel="stylesheet" href="flow.css"></head>
+<body class="panel white"><header id="head"></header><main class="panel-body">
+  <div class="lbl3">Stash Pro —<br><span id="plan"></span></div>
+  <h1>Checkout</h1>
+  <div class="rows">
+    <div class="line"><span id="item"></span><span id="price"></span></div>
+    <div class="line muted"><span>Tax</span><span id="tax"></span></div>
+    <div class="total"><b>Total today</b><span id="total"></span></div>
+  </div>
+  <p class="fine left" id="renew"></p>
+  <form id="promoForm"><div class="pill-field has-action"><label class="sr" for="promo">Promo code</label><input id="promo" placeholder="Promo code" autocomplete="off">
+    <button class="btn icon-round action" aria-label="Apply promo code" type="submit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L10 14M21 3l-7 18-4-7-7-4z"/></svg></button></div></form>
+  <p id="status" class="status" role="status" aria-live="polite"></p>
+  <div style="display:flex;flex-direction:column;gap:10px;margin-top:auto">
+    <button id="paypal" type="button" class="btn lg accent">Pay with PayPal</button>
+    <button id="card" type="button" class="btn outline" style="height:48px;border-radius:24px;font-size:14px;font-weight:400">Debit or credit card</button>
+    <p class="fine">Payment handled securely by PayPal</p>
+  </div>
+</main><script type="module" src="checkout.js"></script></body></html>

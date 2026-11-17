@@ -1,0 +1,61 @@
+/* Side panel · onboarding — see docs/layout.md */
+.onboard { padding-top: 24px; }
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; align-items: start; }
+.steps i { display: block; height: 1px; background: var(--ink); opacity: .35; } .steps i.on { height: 2px; opacity: 1; } .steps i.done { height: 1px; opacity: 1; }
+.onboard h1 { margin-top: 24px; }
+.onboard .lead { color: #2A2A2A; }
+.choices { margin-top: auto; display: flex; flex-direction: column; }
+.choice { display: flex; align-items: center; gap: 14px; padding: 16px 0; border-top: 1px solid var(--ink); text-decoration: none; color: var(--ink); }
+.choice:last-child { border-bottom: 1px solid var(--ink); }
+.choice:hover { background: rgba(255,255,255,.35); }
+.choice:focus-visible { outline: 0; box-shadow: inset 0 0 0 2px var(--ink); }
+.choice svg { flex-shrink: 0; } .choice span { display: flex; flex-direction: column; gap: 2px; }
+.choice strong { font-size: 17px; font-weight: 400; } .choice small { font-size: 13px; color: #2A2A2A; }
+.note { margin: 0; font-size: 12px; color: #2A2A2A; }
+.skip { font-size: 13px; color: var(--ink); margin-right: 4px; }
+
+/* Importing */
+.lbl { font-size: 12px; color: var(--ink-2); }
+.prog { display: flex; flex-direction: column; gap: 8px; }
+.progrow { display: flex; justify-content: space-between; font-size: 13px; }
+.bar { height: 8px; border-radius: 4px; border: 1px solid var(--ink); overflow: hidden; }
+.bar > div { width: 0; height: 100%; background: var(--lime); border-right: 1px solid var(--ink); transition: width .25s; }
+.checks { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--ink); }
+.checks li { display: flex; align-items: center; gap: 12px; height: 48px; border-top: 1px solid var(--ink); font-size: 15px; color: var(--ink-2); }
+.checks li i { width: 20px; height: 20px; flex-shrink: 0; border-radius: 50%; border: 1px solid var(--ink); box-sizing: border-box; }
+.checks li.active { color: var(--ink); font-weight: 500; }
+.checks li.active i { background: var(--lime); border-width: 1px; box-shadow: inset 0 0 0 5px var(--lime), inset 0 0 0 11px var(--ink); }
+.checks li.done { color: var(--ink); }
+.checks li.done i { background: var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 12.5l3.2 3.2L17 9' fill='none' stroke='%23fff' stroke-width='1.8'/%3E%3C/svg%3E") center / 20px no-repeat; }
+.bottom { margin-top: auto; display: flex; flex-direction: column; gap: 12px; }
+.bottom [hidden] { display: none; }
+.status.info { color: var(--ink-2); }
+
+/* All sorted */
+.stats3 { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; color: #1F1F1F; }
+.stats3 b { font-size: 22px; font-weight: 400; color: var(--ink); letter-spacing: -.02em; margin-right: 4px; }
+.folders { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--ink); }
+.folders li { display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 8px 0; border-top: 1px solid var(--ink); font-size: 15px; }
+.folders .ico { width: 30px; height: 30px; border-radius: 15px; display: grid; place-items: center; flex-shrink: 0; }
+.folders .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.folders .n { color: #1F1F1F; }
+.folders .pill-field { flex: 1; min-height: 38px; padding: 0 14px; } .folders .pill-field input { font-size: 15px; }
+.folders .err { margin: 0; padding-left: 42px; }
+.folders li.edit { flex-wrap: wrap; }
+.seeall { align-self: flex-start; font-size: 13px; } .seeall[hidden] { display: none; }
+.onboard .actions { margin-top: auto; display: flex; gap: 8px; } .onboard .actions .grow { flex: 1; }
+
+/* Pin tip */
+.mock { height: 120px; border-radius: 20px; border: 1.5px solid var(--ink); display: flex; overflow: hidden; flex-shrink: 0; }
+.mockpage { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.mockpage i { display: block; height: 8px; border-radius: 4px; background: rgba(17,17,17,.2); }
+.mockpanel { width: 34%; background: var(--ink); display: grid; place-items: center; }
+.tips { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--ink); }
+.tips li { display: flex; align-items: center; gap: 14px; min-height: 46px; border-top: 1px solid var(--ink); font-size: 15px; }
+.tips .num { font-size: 13px; width: 20px; flex-shrink: 0; }
+.tips .btn.link-btn { font-size: 15px; vertical-align: baseline; }
+.shortcut { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.shortcut .lbl { font-size: 13px; color: #1F1F1F; }
+.keys { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; font-size: 13px; font-weight: 500; }
+.keys kbd { font: inherit; padding: 6px 12px; border-radius: 14px; border: 1.5px solid var(--ink); }
+.keys .unset { font-weight: 400; }

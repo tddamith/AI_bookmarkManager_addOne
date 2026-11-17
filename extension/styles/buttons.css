@@ -1,0 +1,78 @@
+/* Stash buttons — "Buttons" + "Buttons — all states" boards.
+   Fully rounded pills, black by default. ONE primary per screen.
+   States per type: Default · Hover · Focus · Loading (aria-busy) · Disabled (disabled).
+   `.pill` is kept as an alias of `.btn`. */
+.btn, .pill { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 22px; border-radius: 22px;
+  border: 1.5px solid transparent; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; box-sizing: border-box;
+  transition: background .12s, transform .08s; --dot1: var(--lime); --dot2: rgba(255,255,255,.7); --dot3: rgba(255,255,255,.4); }
+.btn.lg { height: 52px; padding: 0 28px; border-radius: 26px; font-size: 16px; }
+.btn.sm { height: 32px; padding: 0 14px; border-radius: 16px; font-size: 12px; }
+.btn.sm::after { content: ""; position: absolute; inset: -6px 0; } /* 44px tap area */
+
+/* ── Types: default + hover ───────────────────────────── */
+.solid { background: var(--ink); color: var(--white); }                                   /* 01 Primary */
+.solid:hover:not(:disabled) { background: #333; }
+.accent { background: var(--lime); color: var(--ink); border-color: var(--ink); --dot1: #111; --dot2: rgba(17,17,17,.7); --dot3: rgba(17,17,17,.4); }  /* 02 Accent: money / upgrade */
+.accent:hover:not(:disabled) { background: #C2E80C; }
+.outline { background: transparent; color: var(--ink); border-color: var(--ink); font-weight: 400; --dot1: #111; --dot2: rgba(17,17,17,.7); --dot3: rgba(17,17,17,.4); }  /* 03 Secondary */
+.outline:hover:not(:disabled) { background: var(--white); }
+.link-btn { height: auto; padding: 0; background: none; border: 0; border-radius: 0; color: var(--ink); text-decoration: none; display: inline-flex; gap: 6px; }  /* 04 Text link */
+.link-btn:hover:not(:disabled) { text-decoration: underline; text-underline-offset: 4px; }
+.icon-round { width: 44px; padding: 0; background: var(--ink); color: var(--white); }     /* 05 Icon — always aria-label */
+.icon-round:hover:not(:disabled) { background: #333; }
+.icon-round.outline { background: transparent; color: var(--ink); }
+.icon-round.outline:hover:not(:disabled) { background: var(--white); }
+.icon-round.action { width: 34px; height: 34px; border: 0; }                              /* round button inside a pill field */
+.split { display: flex; gap: 6px; } .split > .solid, .split > .accent { flex: 1; } .split > .icon-round { flex-shrink: 0; }  /* 06 Split */
+.seg { display: grid; grid-template-columns: 1fr 1fr; padding: 3px; border-radius: 22px; border: 1.5px solid var(--ink); }     /* 07 Segmented */
+.seg-btn { position: relative; height: 36px; border: 0; border-radius: 18px; background: transparent; color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; --dot1: var(--lime); --dot2: rgba(255,255,255,.7); --dot3: rgba(255,255,255,.4); }
+.seg-btn[aria-pressed=true] { background: var(--ink); color: var(--white); font-weight: 500; }
+.seg-btn:hover:not([aria-pressed=true]):not(:disabled) { background: #E3E3DE; }
+.chip-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 18px; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; box-sizing: border-box; }  /* 08 Chip / tab */
+.chip-btn[aria-pressed=true] { background: var(--ink); color: var(--white); font-weight: 500; }
+.chip-btn:hover:not([aria-pressed=true]):not(:disabled) { background: var(--white); }
+.chip-btn[aria-pressed=true]:hover:not(:disabled) { background: #333; }
+
+/* ── Focus: 2px black ring, 3px out (segmented 2px/2px). Shows on any background ── */
+.btn:focus-visible, .pill:focus-visible, .chip-btn:focus-visible, .icon-btn:focus-visible { outline: 0; box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--ink); }
+.seg-btn:focus-visible { outline: 0; box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--ink); z-index: 1; }
+.link-btn:focus-visible { border-radius: 8px; padding: 4px 8px; box-shadow: 0 0 0 2px var(--ink); }
+body.lime .btn:focus-visible, body.lime .chip-btn:focus-visible { box-shadow: 0 0 0 3px var(--lime), 0 0 0 5px var(--ink); }
+body.sky .btn:focus-visible { box-shadow: 0 0 0 3px var(--sky), 0 0 0 5px var(--ink); }
+body.gray .btn:focus-visible { box-shadow: 0 0 0 3px var(--gray), 0 0 0 5px var(--ink); }
+body.tan .btn:focus-visible { box-shadow: 0 0 0 3px var(--tan), 0 0 0 5px var(--ink); }
+/* Pressed is only a brief nudge, not a documented state */
+.btn:active:not(:disabled):not([aria-busy=true]) { transform: scale(.97); }
+
+/* ── Loading: aria-busy="true". Label hidden, WIDTH KEPT, three dots (spinner for text link + chip). Blocks clicks. ── */
+[aria-busy=true] { pointer-events: none; cursor: progress; }
+.btn[aria-busy=true], .seg-btn[aria-busy=true] { color: transparent; }
+.btn[aria-busy=true] > *, .seg-btn[aria-busy=true] > * { visibility: hidden; }
+.btn[aria-busy=true]::before, .seg-btn[aria-busy=true]::before { content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -13px; border-radius: 3px;
+  background: var(--dot1); box-shadow: 10px 0 0 var(--dot2), 20px 0 0 var(--dot3); }
+.solid[aria-busy=true], .icon-round[aria-busy=true] { background: var(--ink); }
+.accent[aria-busy=true] { background: var(--lime); }
+.outline[aria-busy=true] { background: transparent; }
+.link-btn[aria-busy=true], .chip-btn[aria-busy=true] { color: inherit; }
+.link-btn[aria-busy=true]::before, .chip-btn[aria-busy=true]::before { content: ""; position: static; flex-shrink: 0; width: 14px; height: 14px; margin: 0; border-radius: 50%; box-shadow: none;
+  border: 2px solid rgba(17,17,17,.18); border-top-color: var(--ink); background: none; animation: stash-spin .8s linear infinite; }
+.chip-btn[aria-busy=true][aria-pressed=true]::before { border-color: rgba(255,255,255,.25); border-top-color: var(--white); }
+.split:has(> [aria-busy=true]) > :not([aria-busy=true]) { opacity: .4; pointer-events: none; }  /* only the main button loads; side option dims */
+@keyframes stash-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .link-btn[aria-busy=true]::before, .chip-btn[aria-busy=true]::before { animation-duration: 3s; } }
+
+/* ── Disabled: real `disabled` attribute. No hover. ── */
+.btn:disabled, .pill:disabled { cursor: not-allowed; transform: none; }
+.solid:disabled, .icon-round:disabled:not(.outline) { background: #D9D9D5; color: #8A8A8A; border-color: transparent; }
+.accent:disabled, .outline:disabled, .icon-round.outline:disabled { background: transparent; border: 1.5px dashed var(--disabled); color: var(--disabled); }
+.accent:disabled { background: var(--disabled-bg); }
+.link-btn:disabled { background: none; border: 0; color: var(--disabled); text-decoration: none; }
+.chip-btn:disabled { border: 1.5px dashed var(--disabled); background: transparent; color: var(--disabled); cursor: not-allowed; }
+.seg:has(:disabled), .seg[aria-disabled=true] { border-style: dashed; border-color: var(--disabled); color: var(--disabled); }
+.seg-btn:disabled { cursor: not-allowed; color: var(--disabled); }
+.seg-btn[aria-pressed=true]:disabled { background: #D9D9D5; color: #8A8A8A; }
+
+/* ── On colour: black primary + outline secondary on lime / sky / tan; on black use lime primary + white outline ── */
+body.ink .solid { background: var(--lime); color: var(--ink); --dot1: #111; --dot2: rgba(17,17,17,.7); --dot3: rgba(17,17,17,.4); }
+body.ink .outline { color: var(--white); border-color: var(--white); --dot1: #fff; --dot2: rgba(255,255,255,.7); --dot3: rgba(255,255,255,.4); }
+body.ink .btn:focus-visible { box-shadow: 0 0 0 3px var(--ink), 0 0 0 5px var(--white); }

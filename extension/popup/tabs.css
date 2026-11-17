@@ -1,0 +1,5 @@
+.tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; padding: 3px; border-radius: 21px; border: 1.5px solid var(--ink); }
+.tabs a { height: 36px; border-radius: 18px; display: grid; place-items: center; font-size: 13px; color: var(--ink); text-decoration: none; }
+.tabs a:hover { background: var(--white); }
+.tabs a[aria-current=page] { background: var(--ink); color: var(--bg); font-weight: 500; }
+.tabs a:focus-visible { outline: 0; box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--ink); z-index: 1; }

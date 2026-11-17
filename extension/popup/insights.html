@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><title>Stash — AI insights</title>
+  <link rel="stylesheet" href="../styles/tokens.css"><link rel="stylesheet" href="../styles/forms.css"><link rel="stylesheet" href="../styles/buttons.css">
+  <link rel="stylesheet" href="panel.css"><link rel="stylesheet" href="tabs.css"><link rel="stylesheet" href="insights.css">
+</head>
+<body class="panel sky">
+  <header id="head"></header>
+  <div class="top">
+    <form id="searchForm" role="search" novalidate>
+      <div class="pill-field has-action"><label class="sr" for="search">Search bookmarks</label>
+        <input id="search" type="search" placeholder="Ask your bookmarks…" autocomplete="off">
+        <button class="btn icon-round action" type="submit" aria-label="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+      </div>
+    </form>
+    <nav id="tabs"></nav>
+  </div>
+
+  <main class="ins" aria-live="polite">
+    <div class="titlerow"><div class="lbl">Insights —</div>
+      <div class="seg compact" role="group" aria-label="Time range">
+        <button type="button" class="seg-btn" id="week" aria-pressed="true">Week</button>
+        <button type="button" class="seg-btn" id="month" aria-pressed="false">Month</button>
+      </div></div>
+
+    <div><h1 id="h1">Insights</h1><div id="visits" class="lbl"></div></div>
+
+    <section id="chartSec" class="chart" hidden>
+      <div class="lbl">Most visited categories —</div>
+      <div id="bars" role="img"></div>
+    </section>
+
+    <section id="topSec" hidden aria-labelledby="topLbl">
+      <div id="topLbl" class="lbl">Most opened pages —</div>
+      <ul id="top" class="list"></ul>
+    </section>
+
+    <section id="aiSec" class="aibox" hidden aria-labelledby="aiLbl">
+      <h2 id="aiLbl"><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 7.4L22 11l-7.4 2.6L12 21l-2.6-7.4L2 11l7.4-2.6z" fill="#111"/></svg>AI suggests —</h2>
+      <ul id="tips"></ul>
+    </section>
+
+    <p id="empty" class="empty" hidden></p>
+    <p id="since" class="foot"></p>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden><span id="toastText"></span><button id="undo" type="button" class="btn sm outline" hidden>Undo</button></div>
+  </main>
+  <script type="module" src="insights.js"></script>
+</body>
+</html>

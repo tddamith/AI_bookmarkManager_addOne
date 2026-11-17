@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><title>Stash — Library</title>
+  <link rel="stylesheet" href="../styles/tokens.css"><link rel="stylesheet" href="../styles/forms.css"><link rel="stylesheet" href="../styles/buttons.css">
+  <link rel="stylesheet" href="panel.css"><link rel="stylesheet" href="tabs.css"><link rel="stylesheet" href="library.css">
+</head>
+<body class="panel" id="drop">
+  <header id="head"></header>
+  <div class="top">
+    <form id="searchForm" role="search" novalidate>
+      <div class="pill-field has-action"><label class="sr" for="search">Search bookmarks</label>
+        <input id="search" type="search" placeholder="Ask your bookmarks…" autocomplete="off">
+        <button class="btn icon-round action" type="submit" aria-label="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+      </div>
+    </form>
+    <nav id="tabs"></nav>
+  </div>
+
+  <main class="lib">
+    <div class="titlerow"><h1>Your library</h1>
+      <div class="meta"><span id="count" aria-live="polite"></span><span aria-hidden="true">·</span><label class="sort">Sort <select id="sort" aria-label="Sort by"><option value="recent">Recent</option><option value="oldest">Oldest</option><option value="name">Name</option></select></label></div></div>
+    <div id="chips" class="chips" role="group" aria-label="Filter by folder"></div>
+    <div id="groups" class="groups" aria-live="polite"></div>
+    <p class="tip">Tip: drag any link from the page into this panel to save it.</p>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden><span id="toastText"></span><button id="undo" type="button" class="btn sm outline" hidden>Undo</button></div>
+  </main>
+  <script type="module" src="library.js"></script>
+</body>
+</html>

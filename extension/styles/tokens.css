@@ -1,0 +1,14 @@
+/* Stash visual style — from Product & Design Spec ("Visual style") */
+@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&display=swap");
+:root {
+  --lime: #D4FA1E; --sky: #A6C3DD; --tan: #C9B597; --gray: #CFCFCC;
+  --bg: #F4F4F1; --ink: #111111; --ink-2: #3A3A3A; --white: #FFFFFF;
+  --danger: #C92A2A; --disabled: #A3A3A3; --disabled-bg: #ECECE8;
+  --font: "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --space: 8px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; width: auto; min-width: 320px; max-width: 520px; min-height: 100vh; margin-inline: auto; background: var(--bg); color: var(--ink); font-family: var(--font); }
+button, input { font: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+html { background: var(--bg); }

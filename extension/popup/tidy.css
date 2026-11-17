@@ -1,0 +1,19 @@
+/* Side panel · AI tidy-up (sky) — see docs/layout.md */
+.tidy { flex: 1; padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 520px; margin-inline: auto; }
+.tidy h1 { margin: 0; font-size: 32px; line-height: 1.04; font-weight: 400; letter-spacing: -.035em; }
+.muted { margin: 0; font-size: 12px; color: #1F1F1F; }
+.cats { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--ink); }
+.cat { display: flex; flex-direction: column; gap: 4px; padding: 10px 0; border-top: 1px solid var(--ink); }
+.cat .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cat .name { font-size: 15px; } .cat .sub { font-size: 12px; color: #1F1F1F; }
+.cat input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--ink); flex-shrink: 0; margin: 0; }
+.cat input:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.cat .detail { font-size: 12px; color: #1F1F1F; padding-left: 2px; overflow-wrap: anywhere; }
+.cat.empty .name { color: #1F1F1F; }
+.cat .scan { align-self: flex-start; margin-top: 4px; }
+.actions { margin-top: auto; display: flex; gap: 8px; } .actions .grow { flex: 1; }
+.actions .btn.outline[aria-pressed=true] { background: var(--white); }
+.undo-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; color: #1F1F1F; min-height: 32px; }
+.undo-row .btn.outline { border-color: var(--ink); } .undo-row[hidden], #undo[hidden] { display: none; }
+.progress { height: 6px; border-radius: 3px; background: rgba(17,17,17,.15); overflow: hidden; } .progress > div { height: 100%; background: var(--ink); width: 0; transition: width .2s; }
+@media (max-width: 399px) { .tidy { padding-inline: 14px; } }

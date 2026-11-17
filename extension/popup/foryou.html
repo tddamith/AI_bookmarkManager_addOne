@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><title>Stash — For you</title>
+  <link rel="stylesheet" href="../styles/tokens.css"><link rel="stylesheet" href="../styles/forms.css"><link rel="stylesheet" href="../styles/buttons.css">
+  <link rel="stylesheet" href="panel.css"><link rel="stylesheet" href="tabs.css"><link rel="stylesheet" href="foryou.css">
+</head>
+<body class="panel tan">
+  <header id="head"></header>
+  <div class="top">
+    <form id="searchForm" role="search" novalidate>
+      <div class="pill-field has-action"><label class="sr" for="search">Search bookmarks</label>
+        <input id="search" type="search" placeholder="Ask your bookmarks…" autocomplete="off">
+        <button class="btn icon-round action" type="submit" aria-label="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+      </div>
+    </form>
+    <nav id="tabs"></nav>
+  </div>
+
+  <main class="fy" aria-live="polite">
+    <div class="head"><div id="kicker" class="lbl">Picked for this page</div><h1 id="h1">More like this</h1></div>
+    <div id="about" class="about" hidden><span class="dot" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z" fill="#D4FA1E"/></svg></span><div id="aboutText"></div></div>
+
+    <section id="libSec" hidden aria-labelledby="libLbl">
+      <div id="libLbl" class="lbl">Already in your library —</div>
+      <ul id="lib" class="list"></ul>
+    </section>
+
+    <section id="siteSec" hidden aria-labelledby="siteLbl">
+      <div id="siteLbl" class="lbl">Sites you use on this topic —</div>
+      <ul id="sites" class="sites"></ul>
+    </section>
+
+    <p id="empty" class="empty" hidden></p>
+    <p class="foot">Updates as you change tabs. Uses page title and URL only.</p>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden><span id="toastText"></span><button id="undo" type="button" class="btn sm outline" hidden>Undo</button></div>
+  </main>
+  <script type="module" src="foryou.js"></script>
+</body>
+</html>

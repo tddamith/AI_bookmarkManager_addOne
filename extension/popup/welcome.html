@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><title>Stash — Welcome</title>
+  <link rel="stylesheet" href="../styles/tokens.css"><link rel="stylesheet" href="../styles/forms.css"><link rel="stylesheet" href="../styles/buttons.css">
+  <link rel="stylesheet" href="panel.css"><link rel="stylesheet" href="onboarding.css">
+</head>
+<body class="panel lime">
+  <header id="head"></header>
+  <main class="panel-body onboard">
+    <div id="steps" class="steps" role="img" aria-label="Step 1 of 4"><i class="on"></i><i></i><i></i><i></i></div>
+    <h1 id="h1">Ready to set up Stash?</h1>
+    <p class="lead">It takes about 30 seconds. Stash will stay beside every page you open.</p>
+
+    <nav class="choices" aria-label="How do you want to start?">
+      <a id="import" class="choice" href="import.html">
+        <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#111"/><path d="M12 6.5v10M7.5 12.5l4.5 4.5 4.5-4.5" fill="none" stroke="#D4FA1E" stroke-width="1.2"/></svg>
+        <span><strong>Bring my bookmarks</strong><small>Import from this browser. AI sorts them.</small></span>
+      </a>
+      <a id="fresh" class="choice" href="home.html">
+        <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="none" stroke="#111" stroke-width="1"/><path d="M12 7v10M7 12h10" stroke="#111" stroke-width="1.2"/></svg>
+        <span><strong>Start fresh</strong><small>Begin with an empty library.</small></span>
+      </a>
+    </nav>
+    <p class="note">Your original browser bookmarks are never changed.</p>
+  </main>
+  <script type="module" src="welcome.js"></script>
+</body>
+</html>

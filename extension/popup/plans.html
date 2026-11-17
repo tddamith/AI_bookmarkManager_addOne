@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><title>Stash — Plans</title>
+  <link rel="stylesheet" href="../styles/tokens.css"><link rel="stylesheet" href="../styles/forms.css"><link rel="stylesheet" href="../styles/buttons.css">
+  <link rel="stylesheet" href="panel.css"><link rel="stylesheet" href="flow.css">
+</head>
+<body class="panel gray">
+  <header id="head"></header>
+  <main class="panel-body">
+    <h1 style="font-size:36px">Choose a plan</h1>
+
+    <div class="seg" role="group" aria-label="Billing period">
+      <button id="monthly" type="button" class="seg-btn" aria-pressed="false">Monthly</button>
+      <button id="yearly" type="button" class="seg-btn" aria-pressed="true">Yearly</button>
+    </div>
+
+    <section class="card free" aria-labelledby="freeT">
+      <div class="cardrow"><h2 id="freeT">Free —</h2><div class="price">$0</div></div>
+      <small id="free"></small>
+      <div id="freeNow" class="current" hidden>Current plan</div>
+    </section>
+
+    <section class="card pro" aria-labelledby="proT">
+      <div class="cardrow"><h2 id="proT">Pro —</h2><div class="price"><span id="price"></span> <small id="per"></small></div></div>
+      <ul class="perks" id="perks"></ul>
+      <a id="upgrade" href="checkout.html" class="btn lg solid">Upgrade to Pro</a>
+    </section>
+
+    <p class="fine" style="margin-top:auto">Cancel any time. Secure payment with PayPal.</p>
+  </main>
+  <script type="module" src="plans.js"></script>
+</body>
+</html>

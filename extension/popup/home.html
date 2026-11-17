@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><title>Stash — Home</title>
+  <link rel="stylesheet" href="../styles/tokens.css"><link rel="stylesheet" href="../styles/forms.css"><link rel="stylesheet" href="../styles/buttons.css">
+  <link rel="stylesheet" href="panel.css"><link rel="stylesheet" href="tabs.css"><link rel="stylesheet" href="home.css">
+</head>
+<body class="panel">
+  <header id="head"></header>
+  <div class="top">
+    <form id="searchForm" role="search" novalidate>
+      <div class="pill-field has-action"><label class="sr" for="search">Search bookmarks</label>
+        <input id="search" type="search" placeholder="Ask your bookmarks…" autocomplete="off">
+        <button class="btn icon-round action" type="submit" aria-label="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+      </div>
+    </form>
+    <nav id="tabs"></nav>
+  </div>
+
+  <main class="home">
+    <section id="gs" class="gs" aria-labelledby="gsTitle" hidden>
+      <div class="gshead"><span id="gsTitle" class="gstitle">Getting started —</span><span id="gsCount">1 of 3</span></div>
+      <div id="gsBars" class="gsbars" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="gsrow"><span id="gsNext" class="gsnext">Next: save your first page</span><button id="gsHide" type="button" class="btn link-btn">Hide</button></div>
+    </section>
+
+    <section class="page" id="pageCard" aria-labelledby="pageLbl">
+      <div id="pageLbl" class="lbl">On this page —</div>
+      <div class="pagetitle"><span id="pageIcon"></span><h1 id="pageTitle">Open a web page</h1></div>
+      <div class="meta"><span id="pageFolder"></span><span id="pageHost"></span></div>
+      <div class="actions">
+        <button id="save" type="button" class="btn solid grow">Save page</button>
+        <button id="later" type="button" class="btn outline">Read later</button>
+      </div>
+    </section>
+    <div id="coach" class="coach" hidden><span class="caret" aria-hidden="true"></span><div class="bubble"><strong>Try it: tap Save page</strong><span>Stash already suggested a folder.</span></div></div>
+    <p id="emptyNote" class="foot" hidden>Your library is empty for now — every save shows up in Library.</p>
+
+    <dl class="stats" aria-label="Your library">
+      <div><dd id="sSaved">–</dd><dt>saved</dt></div>
+      <div><dd id="sWeek">–</dd><dt>this week</dt></div>
+      <div><dd id="sLater">–</dd><dt>read later</dt></div>
+    </dl>
+
+    <section id="pinSec" aria-labelledby="pinTitle" hidden>
+      <div class="sechead"><h2 id="pinTitle">Pinned —</h2></div>
+      <ul id="pins" class="pinlist"></ul>
+    </section>
+
+    <section aria-labelledby="aiTitle">
+      <div class="sechead"><h2 id="aiTitle"><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 7.4L22 11l-7.4 2.6L12 21l-2.6-7.4L2 11l7.4-2.6z" fill="#111"/></svg>AI suggestions —</h2><a href="tidy.html">See all</a></div>
+      <ul id="tips"></ul>
+    </section>
+
+    <section class="chart" aria-labelledby="chTitle">
+      <div class="sechead"><h2 id="chTitle">Biggest folders —</h2><a href="insights.html">Insights</a></div>
+      <div id="bars" role="img"></div>
+    </section>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden><span id="toastText"></span><button id="undo" type="button" class="btn sm outline" hidden>Undo</button></div>
+  </main>
+  <script type="module" src="home.js"></script>
+</body>
+</html>

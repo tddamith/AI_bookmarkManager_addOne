@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><title>Stash — Log in</title>
+  <link rel="stylesheet" href="../styles/tokens.css"><link rel="stylesheet" href="../styles/forms.css"><link rel="stylesheet" href="../styles/buttons.css">
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body class="panel">
+  <header id="head"></header>
+  <main class="panel-body">
+    <svg class="accent-lines" width="140" height="64" viewBox="0 0 140 64" aria-hidden="true"><path d="M0 0V44M14 0L140 60" stroke="#111" stroke-width="1" fill="none"/></svg>
+    <svg width="56" height="68" viewBox="0 0 24 29" aria-hidden="true"><path d="M2 1h20v27l-10-7-10 7z" fill="#111111"/><path d="M12 1v14" stroke="#F4F4F1" stroke-width="0.6"/></svg>
+    <h1>Welcome back</h1>
+    <p class="lead">Log in to see your bookmarks next to every page.</p>
+
+    <button id="google" type="button" class="btn lg outline">Continue with Google</button>
+    <div class="or" aria-hidden="true"><span></span>or<span></span></div>
+
+    <form id="form" class="panel-form" novalidate>
+      <div class="field">
+        <label for="email">Email —</label>
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <div class="row"><label for="password">Password —</label><a href="#" id="forgot">Forgot?</a></div>
+        <div class="control"><input id="password" type="password" placeholder="••••••••" autocomplete="current-password" required><button type="button" class="icon-btn" data-toggle-password="password"></button></div>
+      </div>
+      <label class="check"><input id="remember" type="checkbox" checked>Keep me logged in on this browser</label>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <button type="submit" class="btn lg solid">Log in</button>
+    </form>
+
+    <footer class="panel-foot">
+      <div>New to Stash? <a href="signup.html">Create an account</a></div>
+      <small>Your bookmarks sync across Chrome, Edge and Brave.</small>
+    </footer>
+  </main>
+  <script type="module" src="login.js"></script>
+</body>
+</html>
