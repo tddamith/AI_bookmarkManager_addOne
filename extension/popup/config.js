@@ -21,3 +21,7 @@ export async function setSession(session, remember = true) {
   await (remember ? api.storage.local : api.storage.session).set({ session });
 }
 export async function clearSession() { await api.storage.session.remove("session"); await api.storage.local.remove("session"); }
+
+// AI summaries (Claude Haiku 5.5, called through YOUR proxy so the API key never ships in the extension).
+// Leave endpoint empty to use the on-device summary instead. See server/worker.js.
+export const AI = { endpoint: "", maxChars: 12000 };

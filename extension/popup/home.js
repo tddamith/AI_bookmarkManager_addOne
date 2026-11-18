@@ -1,4 +1,4 @@
-import { api, $, getSession, clearSession } from "./config.js";
+import { api, $, getSession, clearSession, AI } from "./config.js";
 import { renderPanelHead } from "./panel.js";
 import { renderTabs } from "./tabs.js";
 import { withBusy } from "./forms.js";
@@ -28,11 +28,29 @@ function toast(msg, onUndo) {
   clearTimeout(toastTimer); toastTimer = setTimeout(() => { $("toast").hidden = true; }, 8000);
 }
 
-// ── Summary (opt-in, local) ────────────────────────────────
+// ── Summary (opt-in; Haiku 5.5 via proxy when AI.endpoint is set, else local) ────────────────────────────────
 // Reading page content is opt-in: Stash asks for this site's permission, reads the text once on this device,
 // and picks the most informative sentences. Nothing is sent anywhere.
 const STOP = new Set("the a an and or but if of to in on at for with from by as is are was were be been it its this that these those you your we our they their he she i not no so than then too very can will just about into over also more most such".split(" "));
 const sums = new Map();   // url -> { words, sents, longer }
+let aiLimited = false;
+async function installId() {   // random per-install ID; identifies the caller for quota
+  let { installId } = await api.storage.local.get("installId");
+  if (!installId) { installId = crypto.randomUUID(); await api.storage.local.set({ installId }); }
+  return installId;
+}
+// Cache of AI summaries by URL (storage.local): a page is never summarized (or billed against quota) twice.
+const CACHE_MAX = 200, CACHE_TTL = 30 * DAY;
+async function cacheGet(url) {
+  const { sumCache = {} } = await api.storage.local.get("sumCache"), e = sumCache[normUrl(url)];
+  return e && Date.now() - e.t < CACHE_TTL ? e : null;
+}
+async function cachePut(url, words, bullets) {
+  const { sumCache = {} } = await api.storage.local.get("sumCache");
+  sumCache[normUrl(url)] = { t: Date.now(), words, bullets };
+  const keep = Object.entries(sumCache).sort((a, b) => b[1].t - a[1].t).slice(0, CACHE_MAX);
+  await api.storage.local.set({ sumCache: Object.fromEntries(keep) });
+}
 let sumLonger = false, sumBusy = false, sumMsg = "";
 function extract(text, words) {
   const sents = (text.replace(/\s+/g, " ").match(/[^.!?]+[.!?]+/g) ?? []).map((s) => s.trim()).filter((s) => s.length > 40 && s.length < 260 && !/^(share|copyright|sign up|subscribe|cookie)/i.test(s));
@@ -44,12 +62,25 @@ function extract(text, words) {
 async function runSummary() {
   if (!tab) return; sumBusy = true; sumMsg = ""; paintSummary(new URL(tab.url).hostname);
   try {
+    const hit = await cacheGet(tab.url);   // cached AI summary: no page read, no permission prompt, no quota used
+    if (hit) { sums.set(tab.url, { words: hit.words, bullets: (n) => hit.bullets.slice(0, n) }); return; }
     const origins = [new URL(tab.url).origin + "/*"];
     if (!(await api.permissions.contains({ origins })) && !(await api.permissions.request({ origins }))) { sumMsg = "Stash needs your OK to read this page. Nothing was read."; return; }
     const [{ result }] = await api.scripting.executeScript({ target: { tabId: tab.id }, func: () => { const el = document.querySelector("article, main, [role=main]") || document.body; return { text: (el.innerText || "").slice(0, 60000), words: (document.body.innerText || "").split(/\s+/).filter(Boolean).length }; } });
-    const s = extract(result.text, result.words);
+    let s = null;
+    if (AI.endpoint) {   // Claude Haiku 5.5 via proxy; falls back to the on-device summary on any failure
+      try {
+        const r = await fetch(AI.endpoint, { method: "POST", headers: { "content-type": "application/json", "x-stash-install": await installId() }, body: JSON.stringify({ title: tab.title, url: tab.url, text: result.text.slice(0, AI.maxChars) }) });
+        aiLimited = r.status === 429;
+        const { bullets = [] } = r.ok ? await r.json() : {};
+        if (bullets.length) s = { words: result.words, bullets: (n) => bullets.slice(0, n) };
+        if (bullets.length) await cachePut(tab.url, result.words, bullets);
+      } catch {}
+    }
+    s ??= extract(result.text, result.words);
     if (!s.bullets(1).length) { sumMsg = "There isn't enough text on this page to summarize."; return; }
     sums.set(tab.url, s);
+    if (aiLimited) toast("Monthly AI limit reached. Used the on-device summary instead.");
   } catch { sumMsg = "Couldn't read this page. Try reloading it."; }
   finally { sumBusy = false; paintPage(); }
 }
@@ -65,7 +96,7 @@ function paintSummary(host) {
   }
   const btn = el("button", { type: "button", className: "btn sm outline", textContent: sumBusy ? "Reading…" : "Summarize this page" });
   if (sumBusy) btn.setAttribute("aria-busy", "true"); btn.onclick = runSummary;
-  body.append(el("div", { className: "sumask" }, el("span", { textContent: sumMsg || "Reads this page once, on this device. Nothing is sent anywhere." }), btn));
+  body.append(el("div", { className: "sumask" }, el("span", { textContent: sumMsg || (aiLimited ? "Monthly AI limit reached. Using the on-device summary." : AI.endpoint ? "Sends this page's text to Stash AI to write a summary. Only when you tap." : "Reads this page once, on this device. Nothing is sent anywhere.") }), btn));
 }
 $("longer").onclick = () => { sumLonger = !sumLonger; paintSummary(new URL(tab.url).hostname); };
 $("copy").onclick = async (e) => { const s = sums.get(tab.url); if (!s) return; await navigator.clipboard.writeText(s.bullets(sumLonger ? 5 : 3).map((t) => "• " + t).join("\n")); const b = e.currentTarget; b.textContent = "Copied"; setTimeout(() => (b.textContent = "Copy"), 1500); };
