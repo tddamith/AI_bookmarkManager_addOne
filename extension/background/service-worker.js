@@ -1,10 +1,17 @@
-// One click on the toolbar icon opens the Stash side panel (Chrome / Edge / Brave).
+import "./sync.js";   // bookmark sync (background)
+// Toolbar icon opens the side panel (default) or a popup, per Profile > "Open Stash as" (storage.local.openAs).
+async function applyMode() {
+  const { openAs = "panel" } = await chrome.storage.local.get("openAs");
+  await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: openAs === "panel" }).catch(() => {});
+  await chrome.action.setPopup({ popup: openAs === "popup" ? "popup/home.html" : "" }).catch(() => {});
+}
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(console.error);
+  applyMode();
   chrome.contextMenus.create({ id: "save-link", title: "Save to Stash", contexts: ["page", "link"] });
 });
-// Also apply on browser start (setting is persisted, but be explicit after updates).
-chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
+chrome.runtime.onStartup.addListener(applyMode);
+applyMode();
+chrome.storage.onChanged.addListener((c, area) => { if (area === "local" && c.openAs) applyMode(); });
 
 // Keyboard shortcut (Ctrl/Cmd+Shift+Y) opens the panel in the current window.
 chrome.commands.onCommand.addListener((command, tab) => {

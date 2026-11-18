@@ -4,7 +4,7 @@ import { renderTabs } from "./tabs.js";
 import { favicon } from "./favicon.js";
 import { HIDE, loadHide, stripStash } from "./hide.js";
 
-renderPanelHead($("head"), `<button id="account" type="button" class="avatar" aria-label="Log out" title="Log out">S</button>`);
+renderPanelHead($("head"), `<button id="account" type="button" class="avatar" aria-label="Profile" title="Profile">S</button>`);
 renderTabs($("tabs"), "library");
 
 const PEEK = 3, MORE = 12;
@@ -89,7 +89,7 @@ let timer;
 $("search").addEventListener("input", (e) => { clearTimeout(timer); timer = setTimeout(() => { query = e.target.value.trim(); paintList(); }, 150); });
 $("searchForm").addEventListener("submit", (e) => { e.preventDefault(); query = $("search").value.trim(); paintList(); });
 $("sort").addEventListener("change", (e) => { sort = e.target.value; paintList(); });
-$("account").addEventListener("click", async () => { await clearSession(); location.href = "login.html"; });
+$("account").addEventListener("click", () => { location.href = "profile.html"; });
 
 // Drag a link from the page into the panel to save it (into the "Stash" folder).
 const drop = document.body;

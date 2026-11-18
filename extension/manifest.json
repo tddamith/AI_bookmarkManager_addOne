@@ -1,13 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "Stash \u2014 AI Bookmark Manager",
+  "name": "Stash — AI Bookmark Manager",
   "version": "0.1.0",
-  "description": "Save, organize and find your bookmarks with AI \u2014 in a side panel.",
+  "description": "Save, organize and find your bookmarks with AI — in a side panel.",
   "permissions": [
     "activeTab",
+    "alarms",
     "bookmarks",
     "contextMenus",
     "favicon",
+    "identity",
     "scripting",
     "sidePanel",
     "storage",
@@ -23,7 +25,8 @@
     }
   },
   "background": {
-    "service_worker": "background/service-worker.js"
+    "service_worker": "background/service-worker.js",
+    "type": "module"
   },
   "options_page": "options/options.html",
   "commands": {

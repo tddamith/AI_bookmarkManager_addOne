@@ -1,4 +1,4 @@
-import { $, PLAN, getSession } from "./config.js";
+import { $, PLAN, getSession, syncPlan } from "./config.js";
 import { renderPanelHead } from "./panel.js";
 renderPanelHead($("head"), "", { back: "home.html", light: true });
 $("free").textContent = `Unlimited bookmarks · ${PLAN.freeAiPerMonth} AI suggestions a month · 1 device`;
@@ -11,6 +11,8 @@ function paint() {
   $("yearly").textContent = `Yearly · save ${PLAN.yearlySavePct}%`;
   $("price").textContent = PLAN.price[billing];
   $("per").textContent = billing === "yearly" ? "/ year" : "/ month";
+  $("was")?.remove();
+  if (billing === "yearly") $("price").insertAdjacentHTML("beforebegin", `<s id="was" style="font-size:14px;opacity:.6;margin-right:6px" aria-label="Was ${PLAN.list.yearly}">${PLAN.list.yearly}</s>`);
   $("upgrade").href = `checkout.html?billing=${billing}`;
 }
 $("monthly").onclick = () => { billing = "monthly"; paint(); };
@@ -18,8 +20,9 @@ $("yearly").onclick = () => { billing = "yearly"; paint(); };
 paint();
 
 // Reflect the current plan: Free shows "Current plan"; a Pro user's CTA becomes a disabled "Current plan".
-getSession().then((s) => {
+syncPlan().then(() => getSession()).then((s) => {
   if (!s) { location.href = "login.html"; return; }
-  if (s.plan === "pro") { const b = $("upgrade"); b.removeAttribute("href"); b.setAttribute("aria-disabled", "true"); b.textContent = "Current plan"; b.classList.add("is-current"); }
+  if (s.plan === "pro") { const b = $("upgrade"); b.removeAttribute("href"); b.setAttribute("aria-disabled", "true"); $("upgradeText").textContent = "Current plan"; b.classList.add("is-current"); }
+  else if (s.isNew) $("continueFree").hidden = false;     // just signed up: Free continues into onboarding
   else $("freeNow").hidden = false;
 });

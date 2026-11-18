@@ -10,3 +10,7 @@ export function renderPanelHead(el, extra = "", opts = {}) {
     try { const w = await api.windows.getCurrent(); await api.sidePanel.close({ windowId: w.id }); } catch { window.close(); }
   });
 }
+
+// Cross-document view transitions can reject when a navigation interrupts them (reload, redirect, back/forward).
+// That is harmless, so swallow it instead of logging "Uncaught (in promise) InvalidStateError".
+for (const ev of ["pageswap", "pagereveal"]) addEventListener(ev, (e) => { const v = e.viewTransition; if (v) for (const k of ["ready", "finished", "updateCallbackDone"]) v[k]?.catch?.(() => {}); });

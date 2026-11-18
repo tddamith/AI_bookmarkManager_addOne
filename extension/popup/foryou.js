@@ -6,7 +6,7 @@ import { keywords } from "./topic.js";
 import { favicon } from "./favicon.js";
 import { HIDE, loadHide, stripStash } from "./hide.js";
 
-renderPanelHead($("head"), `<button id="account" type="button" class="avatar" aria-label="Log out" title="Log out">S</button>`);
+renderPanelHead($("head"), `<button id="account" type="button" class="avatar" aria-label="Profile" title="Profile">S</button>`);
 renderTabs($("tabs"), "foryou");
 
 const el = (tag, props = {}, ...kids) => { const n = document.createElement(tag); Object.assign(n, props); n.append(...kids); return n; };
@@ -80,5 +80,5 @@ api.tabs.onActivated.addListener(paint);
 api.tabs.onUpdated.addListener((_i, info) => { if (info.url || info.status === "complete") paint(); });
 api.bookmarks.onCreated.addListener(paint); api.bookmarks.onRemoved.addListener(paint);
 $("searchForm").addEventListener("submit", (e) => { e.preventDefault(); const q = $("search").value.trim(); location.href = "library.html" + (q ? `?q=${encodeURIComponent(q)}` : ""); });
-$("account").addEventListener("click", async () => { await clearSession(); location.href = "login.html"; });
+$("account").addEventListener("click", () => { location.href = "profile.html"; });
 paint();

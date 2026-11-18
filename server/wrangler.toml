@@ -1,0 +1,35 @@
+# Cloudflare Worker config for the Stash API (accounts, Google sign-in, Claude Haiku AI, PayPal Pro).
+# Deploy from this folder:  wrangler deploy
+#
+# Secrets are NOT stored here. Set them once with:
+#   wrangler secret put ANTHROPIC_API_KEY
+#   wrangler secret put PAYPAL_CLIENT_ID
+#   wrangler secret put PAYPAL_SECRET
+#   wrangler secret put PAYPAL_WEBHOOK_ID
+#
+# After deploy, put the worker URL in extension/popup/config.js (AI.endpoint).
+
+name = "stash-api"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+
+# Users, sessions, Pro status, quotas and rate limits all live in this one namespace.
+# Create it with:  wrangler kv namespace create KV   then paste the id below.
+[[kv_namespaces]]
+binding = "KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+[vars]
+# PayPal: "sandbox" while testing, "live" when you go public.
+PAYPAL_ENV = "sandbox"
+# Subscription plan IDs from PayPal (create $6.99 monthly and $75.99 yearly plans).
+PAYPAL_PLAN_MONTHLY = "P-5UL26421MY841292ANL6VNJA"
+PAYPAL_PLAN_YEARLY = "P-1WG283644W3590541NL6VN2I"
+
+# Google sign-in: "Web application" OAuth client ID (same value as GOOGLE.clientId in config.js).
+GOOGLE_CLIENT_ID = "REPLACE_WITH_GOOGLE_CLIENT_ID"
+
+# AI credits per month. Free users get FREE_LIMIT, Pro users PRO_LIMIT. IP_DAILY_LIMIT is an abuse backstop.
+FREE_LIMIT = "50"
+PRO_LIMIT = "1000"
+IP_DAILY_LIMIT = "200"

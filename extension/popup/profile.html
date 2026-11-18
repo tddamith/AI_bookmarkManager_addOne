@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><title>Stash — Profile</title>
+  <link rel="stylesheet" href="../styles/tokens.css"><link rel="stylesheet" href="../styles/forms.css"><link rel="stylesheet" href="../styles/buttons.css">
+  <link rel="stylesheet" href="panel.css"><link rel="stylesheet" href="profile.css">
+</head>
+<body class="panel">
+  <header id="head"></header>
+  <main class="prof">
+    <div class="who">
+      <div id="avatar" class="big-avatar" aria-hidden="true">S</div>
+      <div class="id"><div id="name" class="nm"></div><div id="email" class="em"></div></div>
+      <span id="badge" class="badge">Free</span>
+    </div>
+
+    <section id="planCard" class="card plan" aria-labelledby="planLbl">
+      <div class="row"><div id="planLbl" class="lbl">Your plan —</div><a id="compare" href="plans.html" class="lnk">Compare plans</a><span id="planStatus" class="lbl" hidden>Active</span></div>
+      <div class="row base"><div id="planName" class="big">Free</div><div id="planNote" class="note"></div></div>
+      <div id="planRows" class="rows" hidden>
+        <div><span>Renews</span><span id="renews">—</span></div>
+        <div><span>Paid with</span><span id="paidWith">PayPal</span></div>
+      </div>
+      <a id="upgrade" class="btn lg accent cta" href="plans.html"><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 7.4L22 11l-7.4 2.6L12 21l-2.6-7.4L2 11l7.4-2.6z" fill="#111"/></svg>Upgrade to Pro — unlimited AI</a>
+      <div id="proBtns" class="topup" hidden><a id="manage" class="btn solid grow" href="https://www.paypal.com/myaccount/autopay/" target="_blank" rel="noopener">Manage plan</a><a id="receipts" class="btn outline" href="https://www.paypal.com/myaccount/transactions/" target="_blank" rel="noopener">Receipts</a></div>
+    </section>
+
+    <section class="card credits" aria-labelledby="crLbl">
+      <div class="row"><div id="crLbl" class="lbl strong"><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 7.4L22 11l-7.4 2.6L12 21l-2.6-7.4L2 11l7.4-2.6z" fill="#111"/></svg>AI credits —</div><span id="reset" class="note"></span></div>
+      <div class="left"><span id="leftN" class="huge">–</span><span id="leftOf" class="note"></span></div>
+      <div id="bar" class="bar" role="progressbar" aria-valuemin="0"><div id="fill"></div></div>
+      <div id="usedNote" class="note"></div>
+      <div id="kinds" class="kinds"></div>
+      <div id="topRow" class="topup"><button id="topup" type="button" class="btn solid grow">Top up 100</button><button id="history" type="button" class="btn outline">History</button></div>
+      <p id="soon" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section aria-labelledby="setLbl">
+      <div id="setLbl" class="lbl">Settings —</div>
+      <div class="set"><span id="openLbl">Open Stash as</span>
+        <div class="seg compact" role="group" aria-labelledby="openLbl"><button type="button" class="seg-btn" id="asPopup" aria-pressed="false">Popup</button><button type="button" class="seg-btn" id="asPanel" aria-pressed="true">Panel</button></div></div>
+      <div class="set"><span id="readLbl">Let AI read page content</span>
+        <button id="readSw" type="button" class="sw" role="switch" aria-checked="true" aria-labelledby="readLbl"><span></span></button></div>
+      <div class="set"><span><span id="syncLbl">Bookmark sync</span><small id="syncNote" class="subnote"></small></span>
+        <button id="syncNow" type="button" class="btn sm outline">Sync now</button></div>
+      <div class="set last"><button id="logout" type="button" class="link-btn">Log out</button><a id="cancelPro" class="lnk dim" href="https://www.paypal.com/myaccount/autopay/" target="_blank" rel="noopener" hidden>Cancel Pro</a></div>
+    </section>
+  </main>
+  <script type="module" src="profile.js"></script>
+</body>
+</html>

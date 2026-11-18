@@ -1,11 +1,11 @@
-import { api, $, getSession, clearSession, AI } from "./config.js";
+import { api, $, getSession, clearSession, AI, authHeaders, trackAi, getPrefs } from "./config.js";
 import { renderPanelHead } from "./panel.js";
 import { renderTabs } from "./tabs.js";
 import { withBusy } from "./forms.js";
 import { favicon } from "./favicon.js";
 import { HIDE, loadHide, stripStash } from "./hide.js";
 
-renderPanelHead($("head"), `<button id="account" type="button" class="avatar" aria-label="Log out" title="Log out">S</button>`);
+renderPanelHead($("head"), `<button id="account" type="button" class="avatar" aria-label="Profile" title="Profile">S</button>`);
 renderTabs($("tabs"), "home");
 
 const DAY = 864e5;
@@ -34,11 +34,6 @@ function toast(msg, onUndo) {
 const STOP = new Set("the a an and or but if of to in on at for with from by as is are was were be been it its this that these those you your we our they their he she i not no so than then too very can will just about into over also more most such".split(" "));
 const sums = new Map();   // url -> { words, sents, longer }
 let aiLimited = false;
-async function installId() {   // random per-install ID; identifies the caller for quota
-  let { installId } = await api.storage.local.get("installId");
-  if (!installId) { installId = crypto.randomUUID(); await api.storage.local.set({ installId }); }
-  return installId;
-}
 // Cache of AI summaries by URL (storage.local): a page is never summarized (or billed against quota) twice.
 const CACHE_MAX = 200, CACHE_TTL = 30 * DAY;
 async function cacheGet(url) {
@@ -68,11 +63,12 @@ async function runSummary() {
     if (!(await api.permissions.contains({ origins })) && !(await api.permissions.request({ origins }))) { sumMsg = "Stash needs your OK to read this page. Nothing was read."; return; }
     const [{ result }] = await api.scripting.executeScript({ target: { tabId: tab.id }, func: () => { const el = document.querySelector("article, main, [role=main]") || document.body; return { text: (el.innerText || "").slice(0, 60000), words: (document.body.innerText || "").split(/\s+/).filter(Boolean).length }; } });
     let s = null;
-    if (AI.endpoint) {   // Claude Haiku 5.5 via proxy; falls back to the on-device summary on any failure
+    if (AI.endpoint && (await getPrefs()).aiReadPages) {   // Claude Haiku 5.5 via proxy; falls back to the on-device summary on any failure
       try {
-        const r = await fetch(AI.endpoint, { method: "POST", headers: { "content-type": "application/json", "x-stash-install": await installId() }, body: JSON.stringify({ title: tab.title, url: tab.url, text: result.text.slice(0, AI.maxChars) }) });
+        const r = await fetch(AI.endpoint + "/ai", { method: "POST", headers: { "content-type": "application/json", ...(await authHeaders()) }, body: JSON.stringify({ title: tab.title, url: tab.url, text: result.text.slice(0, AI.maxChars) }) });
         aiLimited = r.status === 429;
-        const { bullets = [] } = r.ok ? await r.json() : {};
+        const { bullets = [], used, limit } = r.ok ? await r.json() : {};
+        if (r.ok) await trackAi("summary", used, limit);
         if (bullets.length) s = { words: result.words, bullets: (n) => bullets.slice(0, n) };
         if (bullets.length) await cachePut(tab.url, result.words, bullets);
       } catch {}
@@ -209,5 +205,5 @@ async function merge(extras) {
 
 // Search → Library with the query.
 $("searchForm").addEventListener("submit", (e) => { e.preventDefault(); const q = $("search").value.trim(); location.href = "library.html" + (q ? `?q=${encodeURIComponent(q)}` : ""); });
-$("account").addEventListener("click", async () => { await clearSession(); location.href = "login.html"; });
+$("account").addEventListener("click", () => { location.href = "profile.html"; });
 load();

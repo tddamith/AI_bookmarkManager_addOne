@@ -40,3 +40,9 @@ a { color: var(--ink); }
 .stack { display: flex; flex-direction: column; gap: 12px; flex: 1; }
 body.lime, body.gray, body.white, body.sky { max-width: none; } body > main { max-width: 520px; margin-inline: auto; }
 .card.pro .perks { gap: 0; } .card.pro .perks li { height: 34px; border-top: 1px solid var(--ink); font-size: 14px; }
+
+/* Plans: arrow buttons (design: Continue with Free → / Upgrade to Pro →) */
+.arrowbtn { gap: 8px; text-decoration: none; } .arrowbtn[hidden] { display: none; }
+#continueFree { height: 46px; font-size: 15px; margin-top: 2px; }
+#upgrade { height: 52px; font-size: 16px; font-weight: 500; flex-shrink: 0; }
+#upgrade.is-current svg { display: none; }

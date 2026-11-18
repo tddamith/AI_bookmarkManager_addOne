@@ -12,8 +12,20 @@
     <div class="titlewrap"><span id="icon"></span><h1 id="title">Open a web page</h1></div>
 
     <div class="group">
-      <div class="row"><label for="folder" class="lbl">Folder —</label><span id="pick" class="pick" hidden><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 7.4L22 11l-7.4 2.6L12 21l-2.6-7.4L2 11l7.4-2.6z" fill="#111"/></svg><span id="pickText">Suggested</span></span></div>
-      <div class="pill-field has-icon"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h5l2 2h9a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#111"/></svg><input id="folder" value="Stash" autocomplete="off" required></div>
+      <div class="row"><label for="folder" class="lbl">Folder —</label><span id="pick" class="pick" hidden><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 7.4L22 11l-7.4 2.6L12 21l-2.6-7.4L2 11l7.4-2.6z" fill="#111"/></svg><span id="pickText">AI pick</span></span></div>
+      <div class="fwrap" id="fwrap">
+        <div class="pill-field has-icon has-action">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" class="fico"><path id="fico" d="M2 6a2 2 0 0 1 2-2h5l2 2h9a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#D4FA1E" stroke="#111" stroke-width="1.2"/></svg>
+          <input id="folder" role="combobox" aria-expanded="false" aria-controls="flist" aria-autocomplete="list" autocomplete="off" placeholder="Search or create a folder" value="Stash">
+          <button id="ftoggle" type="button" class="btn icon-round action" aria-label="Show folders"><svg id="fchev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        </div>
+        <div id="flist" class="flist" role="listbox" aria-label="Folders" hidden></div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="lbl" id="colLbl">Folder colour — <span id="colName"></span></div>
+      <div id="swatches" class="swatches" role="radiogroup" aria-labelledby="colLbl"></div>
     </div>
 
     <div class="group">
@@ -23,8 +35,8 @@
     </div>
 
     <div class="group field-note">
-      <label for="note" class="lbl">Note —</label>
-      <textarea id="note" placeholder="Why are you saving this?"></textarea>
+      <label for="note" class="lbl">AI summary —</label>
+      <textarea id="note" placeholder="Summarize this page, or add a note"></textarea>
     </div>
 
     <div class="group">
@@ -38,7 +50,7 @@
 
     <p id="status" class="status" role="status" aria-live="polite"></p>
     <div class="actions">
-      <button id="save" type="submit" class="btn lg solid grow">Save</button>
+      <button id="save" type="submit" class="btn lg solid grow">Save to Stash</button>
       <a class="btn lg outline" href="home.html">Cancel</a>
     </div>
   </form>

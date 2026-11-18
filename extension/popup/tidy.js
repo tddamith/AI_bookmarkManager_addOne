@@ -4,7 +4,7 @@ import { renderTabs } from "./tabs.js";
 import { withBusy } from "./forms.js";
 import { HIDE, loadHide, stripStash } from "./hide.js";
 
-renderPanelHead($("head"), `<button id="account" type="button" class="avatar" aria-label="Log out" title="Log out">S</button>`);
+renderPanelHead($("head"), `<button id="account" type="button" class="avatar" aria-label="Profile" title="Profile">S</button>`);
 renderTabs($("tabs"), "tidy");
 
 const el = (tag, props = {}, ...kids) => { const n = document.createElement(tag); Object.assign(n, props); n.append(...kids); return n; };
@@ -144,5 +144,5 @@ $("fix").onclick = (e) => withBusy(e.currentTarget, fix);
 $("undo").onclick = (e) => withBusy(e.currentTarget, undo);
 $("preview").onclick = (e) => { previewing = !previewing; e.currentTarget.setAttribute("aria-pressed", previewing); e.currentTarget.textContent = previewing ? "Hide preview" : "Preview"; paint(); };
 $("searchForm").addEventListener("submit", (e) => { e.preventDefault(); const q = $("search").value.trim(); location.href = "library.html" + (q ? `?q=${encodeURIComponent(q)}` : ""); });
-$("account").addEventListener("click", async () => { await clearSession(); location.href = "login.html"; });
+$("account").addEventListener("click", () => { location.href = "profile.html"; });
 load().then(paintUndo);
