@@ -1,4 +1,4 @@
-import { api, $, getSession, clearSession } from "./config.js";
+import { api, $, getSession, clearSession, requireVerified } from "./config.js";
 import { renderPanelHead } from "./panel.js";
 import { renderTabs } from "./tabs.js";
 import { withBusy } from "./forms.js";
@@ -135,6 +135,7 @@ async function paintUndo() {
 async function load() {
   const session = await getSession();
   if (!session) { location.href = "login.html"; return; }
+  if (!(await requireVerified())) return;
   $("account").textContent = ((session.name || session.email || "S")[0]).toUpperCase();
   await loadHide(); roots = await api.bookmarks.getTree(); marks = flatten(roots);
   if (!scanning) { const { deadScan } = await api.storage.local.get("deadScan"); scanned = !!deadScan; dead = deadScan?.items ?? []; }

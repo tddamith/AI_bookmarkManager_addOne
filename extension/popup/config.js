@@ -29,7 +29,7 @@ export async function clearSession() { await api.storage.session.remove("session
 
 // AI summaries (Claude Haiku 5.5, called through YOUR proxy so the API key never ships in the extension).
 // Leave endpoint empty to use the on-device summary instead. See server/worker.js.
-export const AI = { endpoint: "http://127.0.0.1:8000", maxChars: 12000 };   // local FastAPI backend (AI_bookmarkManager_api)
+export const AI = { endpoint: "http://127.0.0.1:8001", maxChars: 12000 };   // local FastAPI backend (AI_bookmarkManager_api)
 
 /** Authorization header for the Stash API (empty when signed out or running without a backend). */
 export async function authHeaders() {
@@ -63,6 +63,32 @@ export async function authRequest(kind, body) {
     if (!r.ok) return { ok: false, error: j.error ?? "network" };
     return { ok: true, token: j.token, user: j.user, pro: !!j.pro, billing: j.billing ?? null, renews: j.renews ?? null, ends: j.ends ?? null };
   } catch { return { ok: false, error: "network" }; }
+}
+/** Email verification calls (signed-in). path: "verify/send" | "verify". Returns { ok, ...json } or { ok:false, error, triesLeft?, retryIn? }. */
+export async function verifyRequest(path, body) {
+  try {
+    const r = await fetch(apiUrl(`/auth/${path}`), { method: "POST", headers: { "content-type": "application/json", ...(await authHeaders()) }, body: JSON.stringify(body ?? {}) });
+    const j = await r.json().catch(() => ({}));
+    return r.ok ? { ok: true, ...j } : { ok: false, ...j, error: j.error ?? "network" };
+  } catch { return { ok: false, error: "network" }; }
+}
+/** Email-verification gate for signed-in pages. Unverified accounts are sent to the OTP screen (verify.html).
+ *  Sessions saved before verification existed have no flag, so ask the API once (/auth/me) and remember the answer. Offline: let them through. */
+export async function requireVerified() {
+  if (!AI.endpoint) return true;
+  const s = await getSession(); if (!s) return true;
+  let verified = s.verified;
+  if (verified === undefined) {
+    try {
+      const r = await fetch(apiUrl("/auth/me"), { headers: await authHeaders() });
+      if (r.status === 401) { await clearSession(); location.href = "login.html"; return false; }
+      if (!r.ok) return true;
+      verified = !!(await r.json()).user?.verified;
+      await setSession({ ...s, verified }, s.remember !== false);
+    } catch { return true; }
+  }
+  if (verified === false) { location.href = "verify.html"; return false; }
+  return true;
 }
 /** Log out: revoke the token on the server (best effort), then clear the local session. */
 export async function signOut() {

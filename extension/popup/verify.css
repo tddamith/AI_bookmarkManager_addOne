@@ -1,0 +1,21 @@
+/* Side panel · Verify email (design boards "Verify email", "wrong code", "Email verified") */
+body.tan { background: var(--tan); max-width: none; }
+.stack { display: flex; flex-direction: column; gap: 16px; } .stack.tight { gap: 8px; }
+.stack[hidden], #done[hidden] { display: none; }
+.eyebrow { font-size: 12px; color: #1F1F1F; }
+#enter h1, #done h1 { margin: 0; font-size: 36px; line-height: 1.04; font-weight: 400; letter-spacing: -.035em; }
+#email { font-weight: 500; color: var(--ink); overflow-wrap: anywhere; }
+.otp { position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.otp .box { height: 52px; border-radius: 16px; border: 1.5px solid var(--ink); background: var(--white); display: grid; place-items: center; font-size: 22px; letter-spacing: -.02em; }
+.otp .box.active { border-width: 2px; box-shadow: 0 0 0 4px var(--lime); }
+.otp.invalid .box { border: 2px solid var(--danger); box-shadow: none; }
+.otp input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; border: 0; font-size: 16px; cursor: text; }
+.msg { margin: 0; font-size: 14px; color: #1F1F1F; display: flex; align-items: center; gap: 8px; } .msg:empty { display: none; }
+.msg.err { color: var(--danger); }
+.msg.err::before { content: ""; width: 16px; height: 16px; flex-shrink: 0; border-radius: 50%; background: var(--danger) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 6v8M12 17v1' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E"); }
+#verify[disabled] { background: #D9D9D5; color: #6B6B6B; border-color: #D9D9D5; cursor: not-allowed; }
+.row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 14px; color: #1F1F1F; }
+.row a { color: var(--ink); }
+.link { border: 0; background: transparent; padding: 0; font: inherit; font-weight: 500; color: var(--ink); text-decoration: underline; cursor: pointer; } .link[hidden] { display: none; }
+.fine { margin: 0; font-size: 12px; color: #2A2A2A; }
+a.btn.solid { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }

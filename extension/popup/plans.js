@@ -1,4 +1,4 @@
-import { $, PLAN, getSession, syncPlan } from "./config.js";
+import { $, PLAN, getSession, syncPlan, requireVerified } from "./config.js";
 import { renderPanelHead } from "./panel.js";
 renderPanelHead($("head"), "", { back: "home.html", light: true });
 $("free").textContent = `Unlimited bookmarks · ${PLAN.freeAiPerMonth} AI suggestions a month · 1 device`;
@@ -20,8 +20,9 @@ $("yearly").onclick = () => { billing = "yearly"; paint(); };
 paint();
 
 // Reflect the current plan: Free shows "Current plan"; a Pro user's CTA becomes a disabled "Current plan".
-syncPlan().then(() => getSession()).then((s) => {
+syncPlan().then(() => getSession()).then(async (s) => {
   if (!s) { location.href = "login.html"; return; }
+  if (!(await requireVerified())) return;
   if (s.plan === "pro") { const b = $("upgrade"); b.removeAttribute("href"); b.setAttribute("aria-disabled", "true"); $("upgradeText").textContent = "Current plan"; b.classList.add("is-current"); }
   else if (s.isNew) $("continueFree").hidden = false;     // just signed up: Free continues into onboarding
   else $("freeNow").hidden = false;

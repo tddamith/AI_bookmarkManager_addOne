@@ -1,4 +1,4 @@
-import { api, $, PLAN, getSession, signOut, syncPlan, getAiUsage, getPrefs } from "./config.js";
+import { api, $, PLAN, getSession, signOut, syncPlan, getAiUsage, getPrefs, requireVerified } from "./config.js";
 import { renderPanelHead } from "./panel.js";
 
 renderPanelHead($("head"), "", { back: "home.html", light: true });
@@ -21,6 +21,7 @@ async function paint() {
   await syncPlan();                                   // Pro status comes from the server (PayPal webhook)
   const s = await getSession();
   if (!s) { location.href = "login.html"; return; }
+  if (!(await requireVerified())) return;
   const name = s.name || (s.email ? s.email.split("@")[0] : "Your account");
   $("avatar").textContent = (name[0] || "S").toUpperCase(); $("name").textContent = name; $("email").textContent = s.email ?? "";
   const pro = s.plan === "pro";

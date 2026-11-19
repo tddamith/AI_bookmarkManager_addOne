@@ -22,10 +22,10 @@ $("form").addEventListener("submit", async (e) => {
       if (AI.endpoint) {
         const r = await authRequest("signup", { name: base.name, email: base.email, password: pw.value });
         if (!r.ok) { status(ERRORS[r.error] ?? ERRORS.network); return; }
-        base.token = r.token; base.email = r.user.email; base.name = r.user.name;
+        base.token = r.token; base.email = r.user.email; base.name = r.user.name; base.verified = !!r.user.verified;
       }
       await setSession(base);
-      location.href = "plans.html";
+      location.href = base.verified === false ? "verify.html" : "plans.html";
     } catch { status("Couldn't create your account. Try again."); }
   });
 });

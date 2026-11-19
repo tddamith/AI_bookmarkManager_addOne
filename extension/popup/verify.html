@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><title>Stash — Verify email</title>
+  <link rel="stylesheet" href="../styles/tokens.css"><link rel="stylesheet" href="../styles/forms.css"><link rel="stylesheet" href="../styles/buttons.css">
+  <link rel="stylesheet" href="panel.css"><link rel="stylesheet" href="verify.css">
+</head>
+<body class="panel tan">
+  <header id="head"></header>
+  <main class="panel-body">
+    <div class="eyebrow">Verify —<br>One quick step</div>
+    <svg width="84" height="62" viewBox="0 0 150 110" aria-hidden="true"><rect x="0" y="10" width="150" height="100" rx="14" fill="#111"/><path d="M8 22l67 48 67-48" fill="none" stroke="#C9B597" stroke-width="3"/><circle cx="136" cy="14" r="14" fill="#D4FA1E" stroke="#111" stroke-width="2"/></svg>
+
+    <section id="enter" class="stack">
+      <div class="stack tight">
+        <h1>Check your inbox.</h1>
+        <p class="lead">We sent a 6-digit code to <strong id="email"></strong>. It works for 10 minutes.</p>
+      </div>
+      <form id="form" class="stack" novalidate>
+        <label for="otp" class="eyebrow">6-digit code —</label>
+        <div id="boxes" class="otp">
+          <div class="box"></div><div class="box"></div><div class="box"></div><div class="box"></div><div class="box"></div><div class="box"></div>
+          <input id="otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" aria-describedby="msg">
+        </div>
+        <p id="msg" class="msg" role="alert"></p>
+        <button id="verify" type="submit" class="btn lg solid" disabled>Verify email</button>
+      </form>
+      <div class="row">
+        <span>Didn’t get it? <button id="resend" type="button" class="link" hidden>Resend code</button><span id="wait"></span></span>
+        <a id="change" href="signup.html">Change email</a>
+      </div>
+      <p class="fine">Check spam if it’s not in your inbox.</p>
+    </section>
+
+    <section id="done" class="stack" hidden>
+      <svg width="76" height="76" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#111"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#D4FA1E" stroke-width="1.6"/></svg>
+      <h1>Email verified.</h1>
+      <p class="lead" id="doneLead">Your account is ready.</p>
+      <a id="go" class="btn lg solid" href="plans.html">Continue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </section>
+  </main>
+  <script type="module" src="verify.js"></script>
+</body>
+</html>

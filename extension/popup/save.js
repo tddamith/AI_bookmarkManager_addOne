@@ -1,4 +1,4 @@
-import { api, $, getSession, AI, authHeaders, trackAi } from "./config.js";
+import { api, $, getSession, AI, authHeaders, trackAi, requireVerified } from "./config.js";
 import { renderPanelHead } from "./panel.js";
 import { initForms, validate, withBusy } from "./forms.js";
 import { favicon } from "./favicon.js";
@@ -122,6 +122,7 @@ function paintTags(all) {
 
 (async () => {
   if (!(await getSession())) { location.href = "login.html"; return; }
+  if (!(await requireVerified())) return;
   [tab] = await api.tabs.query({ active: true, currentWindow: true });
   await loadHide(); roots = await api.bookmarks.getTree(); marks = flatten(roots);
   folders = listFolders(); colors = (await api.storage.local.get("folderColors")).folderColors ?? {}; initFolderPicker(); paintFolder();

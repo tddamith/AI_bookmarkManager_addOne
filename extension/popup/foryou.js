@@ -1,4 +1,4 @@
-import { api, $, getSession, clearSession } from "./config.js";
+import { api, $, getSession, clearSession, requireVerified } from "./config.js";
 import { renderPanelHead } from "./panel.js";
 import { renderTabs } from "./tabs.js";
 import { withBusy } from "./forms.js";
@@ -31,6 +31,7 @@ function toast(msg, onUndo) {
 async function paint() {
   const session = await getSession();
   if (!session) { location.href = "login.html"; return; }
+  if (!(await requireVerified())) return;
   $("account").textContent = ((session.name || session.email || "S")[0]).toUpperCase();
   const [tab] = await api.tabs.query({ active: true, currentWindow: true });
   const h = host(tab?.url ?? "");

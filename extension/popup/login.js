@@ -7,11 +7,13 @@ const status = (msg) => { $("status").textContent = msg; };
 
 const ERRORS = { invalid: "Email or password is wrong.", rate_limited: "Too many attempts. Wait a few minutes and try again.", network: "Couldn't reach Stash. Check your connection and try again." };
 /** Real login when a Stash API is configured; otherwise a local-only session (development without a backend). Never stores the password. */
+let needsVerify = false;
 async function signIn(email, password, remember) {
   if (!AI.endpoint) { await setSession({ email, remember, signedInAt: Date.now() }, remember); return null; }
   const r = await authRequest("login", { email, password, remember });
   if (!r.ok) return ERRORS[r.error] ?? ERRORS.network;
-  await setSession({ email: r.user.email, name: r.user.name, token: r.token, plan: r.pro ? "pro" : "free", billing: r.billing, renews: r.renews, ends: r.ends, paid: r.pro, paidWith: r.pro ? "PayPal" : undefined, remember, signedInAt: Date.now() }, remember);
+  await setSession({ email: r.user.email, name: r.user.name, token: r.token, plan: r.pro ? "pro" : "free", billing: r.billing, renews: r.renews, ends: r.ends, paid: r.pro, paidWith: r.pro ? "PayPal" : undefined, verified: r.user.verified, remember, signedInAt: Date.now() }, remember);
+  needsVerify = r.user.verified === false;
   return null;
 }
 
@@ -23,7 +25,7 @@ $("form").addEventListener("submit", async (e) => {
     { input: pw, ok: !!pw.value, message: "Enter your password" },
   ])) return;
   await withBusy(e.submitter, async () => {
-    try { const err = await signIn(email.value.trim().toLowerCase(), pw.value, $("remember").checked); if (err) { status(err); return; } location.href = "home.html"; }
+    try { const err = await signIn(email.value.trim().toLowerCase(), pw.value, $("remember").checked); if (err) { status(err); return; } location.href = needsVerify ? "verify.html" : "home.html"; }
     catch { status(ERRORS.network); }
   });
 });

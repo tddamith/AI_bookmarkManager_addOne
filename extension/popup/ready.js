@@ -1,4 +1,4 @@
-import { $, api, getSession } from "./config.js";
+import { $, api, getSession, requireVerified } from "./config.js";
 import { renderPanelHead } from "./panel.js";
 import { setFieldError, clearFieldError, withBusy } from "./forms.js";
 renderPanelHead($("head"), "", { light: true });
@@ -14,6 +14,7 @@ let stash = null, rows = [], summary = null, editing = false, showAll = false;
 
 async function load() {
   if (!(await getSession())) { location.href = "login.html"; return; }
+  if (!(await requireVerified())) return;
   const { importState } = await api.storage.local.get("importState"); summary = importState?.summary ?? null;
   const roots = await api.bookmarks.getTree(); const other = roots[0].children[1] ?? roots[0].children[0];
   stash = (other.children ?? []).find((c) => !c.url && /^stash$/i.test(c.title)) ?? null;

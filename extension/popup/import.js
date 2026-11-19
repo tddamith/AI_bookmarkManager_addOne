@@ -1,4 +1,4 @@
-import { $, api, getSession } from "./config.js";
+import { $, api, getSession, requireVerified } from "./config.js";
 import { renderPanelHead } from "./panel.js";
 import { keywords } from "./topic.js";
 renderPanelHead($("head"));
@@ -29,6 +29,7 @@ function flatten(rs, skipId) {
 
 async function run() {
   const session = await getSession(); if (!session) { location.href = "login.html"; return; }
+  if (!(await requireVerified())) return;
   $("retry").hidden = true; $("status").textContent = "";
   setStep("read"); progress(0, 0); $("count").textContent = "Reading…";
   let roots = await api.bookmarks.getTree();

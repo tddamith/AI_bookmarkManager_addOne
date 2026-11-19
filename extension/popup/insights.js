@@ -1,4 +1,4 @@
-import { api, $, getSession, clearSession, AI, authHeaders, trackAi } from "./config.js";
+import { api, $, getSession, clearSession, AI, authHeaders, trackAi, requireVerified } from "./config.js";
 import { renderPanelHead } from "./panel.js";
 import { renderTabs } from "./tabs.js";
 import { withBusy } from "./forms.js";
@@ -30,6 +30,7 @@ function toast(msg, onUndo) {
 async function paint() {
   const session = await getSession();
   if (!session) { location.href = "login.html"; return; }
+  if (!(await requireVerified())) return;
   $("account").textContent = ((session.name || session.email || "S")[0]).toUpperCase();
   await loadHide(); roots = await api.bookmarks.getTree(); const marks = flatten(roots);
   const byUrl = new Map(marks.map((b) => [normUrl(b.url), b]));

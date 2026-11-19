@@ -1,4 +1,4 @@
-import { api, $, getSession, clearSession, AI, authHeaders, trackAi, getPrefs } from "./config.js";
+import { api, $, getSession, clearSession, AI, authHeaders, trackAi, getPrefs, requireVerified } from "./config.js";
 import { renderPanelHead } from "./panel.js";
 import { renderTabs } from "./tabs.js";
 import { withBusy } from "./forms.js";
@@ -142,6 +142,7 @@ api.tabs.onUpdated.addListener((_i, info) => { if (info.url || info.status === "
 async function load() {
   const session = await getSession();
   if (!session) { location.href = "login.html"; return; }
+  if (!(await requireVerified())) return;     // sign-up not finished: confirm the email first (OTP)
   if (session.isNew) { location.href = "welcome.html"; return; }
   const name = session.name || session.email || "";
   $("account").textContent = (name[0] || "S").toUpperCase();

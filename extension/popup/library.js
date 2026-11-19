@@ -1,4 +1,4 @@
-import { api, $, getSession, clearSession } from "./config.js";
+import { api, $, getSession, clearSession, requireVerified } from "./config.js";
 import { renderPanelHead } from "./panel.js";
 import { renderTabs } from "./tabs.js";
 import { favicon } from "./favicon.js";
@@ -80,6 +80,7 @@ function paintList() {
 async function load() {
   const session = await getSession();
   if (!session) { location.href = "login.html"; return; }
+  if (!(await requireVerified())) return;
   $("account").textContent = ((session.name || session.email || "S")[0]).toUpperCase();
   await loadHide(); roots = await api.bookmarks.getTree(); marks = flatten(roots);
   paintChips(); paintList();
